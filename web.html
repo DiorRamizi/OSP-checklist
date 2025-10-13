@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOP Checklist</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(180deg, #041b3b 0%, #061d40 100%);
+      color: #e6eefc;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      width: 100%;
+      text-align: center;
+      padding: 30px 0;
+    }
+
+    .logo-space {
+      height: 60px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #c0d833;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+      padding: 30px;
+      width: 100%;
+      max-width: 700px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    label, select, button {
+      font-size: 1.1rem;
+    }
+
+    select, button {
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: none;
+      margin: 8px;
+    }
+
+    select {
+      background: #0b2a5a;
+      color: #e6eefc;
+      border: 1px solid #4aa3ff;
+    }
+
+    button {
+      background: #c0d833;
+      color: #041b3b;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button:hover {
+      background: #c0d833;
+      transform: scale(1.05);
+    }
+
+    .device-form {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid #2a4a88;
+      border-radius: 10px;
+      padding: 20px 120px;
+      margin-top: 25px;
+      text-align: left;
+    }
+
+    .device-form h2 {
+      font-size: 1.4rem;
+      color: #4aa3ff;
+      margin-bottom: 8px;
+    }
+
+    .checklist label {
+      display: block;
+      margin: 6px 0;
+      font-size: 1.05rem;
+    }
+
+    input[type="checkbox"] {
+      transform: scale(1.3);
+      margin-right: 10px;
+    }
+
+    .result {
+      margin-top: 25px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .success {
+      background: rgba(0, 255, 100, 0.1);
+      color: #53c15c;
+      border: 1px solid #c0d833;
+    }
+
+    .error {
+      background: rgba(255, 80, 80, 0.1);
+      color: #ff7a7a;
+      border: 1px solid #ff7a7a;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-space">
+      <img src="https://nettxio.com/wp-content/uploads/2022/07/nettxio-1.svg" alt="">
+    </div>
+    <h1>MOP CHECKLIST</h1>
+  </header>
+
+  <div class="container">
+    <div class="select-devices">
+      <label for="numDevices">Select number of devices (1–10):</label>
+      <select id="numDevices">
+        <option value="" disabled selected>Select</option>
+      </select>
+      <button id="createForms">Create Forms</button>
+    </div>
+</div>
+
+<div class="footer">
+  version 1.0.3 
+  Done by the Interns
+</div>
+
+<script>
+  // Get the select element
+  const select = document.getElementById('numDevices');
+
+  // Generate options from 1 to 10
+  for (let i = 1; i <= 10; i++) {
+    const option = document.createElement('option');
+    option.value = i;
+    option.textContent = i;
+    select.appendChild(option);
+  }
+</script>
+
+    <div id="formsContainer"></div>
+
+    <button id="validateBtn" style="margin-top:20px;">Validate Checks</button>
+    <div id="resultMessage" class="result"></div>
+  </div>
+
+  <script>
+    const devices = [
+      "Cisco 15454/DWDM",
+      "Cyan Z77/Z33/Z22",
+      "Coriant",
+      "Ciena 3928",
+      "Ciena 6500",
+      "Ciena 5142",
+      "Ciena 5170",
+      "Ciena 5166",
+      "Infinera Nano 7100/G30",
+      "Infinera DTNx",
+      "Transmode TM301/3000"
+    ];
+
+    const formsContainer = document.getElementById("formsContainer");
+    const createFormsBtn = document.getElementById("createForms");
+    const validateBtn = document.getElementById("validateBtn");
+    const resultMessage = document.getElementById("resultMessage");
+
+    createFormsBtn.addEventListener("click", () => {
+      const num = parseInt(document.getElementById("numDevices").value);
+      formsContainer.innerHTML = "";
+      resultMessage.innerHTML = "";
+
+      if (!num || num < 1 || num > 10) {
+        alert("Please select a valid number between 1 and 10.");
+        return;
+      }
+
+      for (let i = 1; i <= num; i++) {
+        const form = document.createElement("div");
+        form.className = "device-form";
+        form.innerHTML = `
+          <h2>Device ${i}</h2>
+          <label>Select device type:</label><br />
+          <select class="deviceType">
+            <option value="" disabled selected>Select a device</option>
+            ${devices.map(d => `<option value="${d}">${d}</option>`).join("")}
+          </select>
+          <div class="checklist"></div>
+        `;
+        formsContainer.appendChild(form);
+      }
+
+      document.querySelectorAll(".deviceType").forEach(select => {
+        select.addEventListener("change", (e) => {
+          const checklistDiv = e.target.parentElement.querySelector(".checklist");
+          const type = e.target.value;
+          checklistDiv.innerHTML = createChecklist(type);
+        });
+      });
+    });
+
+    function createChecklist(type) {
+      let checks = [];
+      if (type.includes("Infinera")) {
+        checks = ["Span Loss", "Services", "Alarms"];
+      } else if (type.includes("Cisco")) {
+        checks = ["Alarms/Conditions", "Span Loss"];
+      } else if (type.includes("Cyan")) {
+        checks = ["Span Loss", "Alarms"];
+      } else {
+        checks = ["Span Loss", "Alarms"];
+      }
+
+      return `
+        <div class="checklist">
+          <h3 style="color:#c0d833;">Checklist</h3>
+          ${checks.map(
+            (c, i) => `
+            <label>
+              <input type="checkbox" class="checkItem" /> ${i + 1}. ${c}
+            </label>`
+          ).join("")}
+        </div>
+      `;
+    }
+
+    validateBtn.addEventListener("click", () => {
+      const deviceForms = document.querySelectorAll(".device-form");
+      let allChecked = true;
+      let errors = [];
+
+      deviceForms.forEach((form, index) => {
+        const checkboxes = form.querySelectorAll(".checkItem");
+        const unchecked = Array.from(checkboxes).filter(cb => !cb.checked);
+
+        if (unchecked.length > 0) {
+          allChecked = false;
+          errors.push(`Device ${index + 1}: ${unchecked.length} unchecked (${unchecked.map(cb => cb.parentElement.textContent.trim()).join(", ")})`);
+        }
+      });
+
+      resultMessage.innerHTML = "";
+      if (deviceForms.length === 0) {
+        resultMessage.innerHTML = `<div class="error">⚠️ Please create and fill out device forms first.</div>`;
+      } else if (allChecked) {
+        resultMessage.innerHTML = `<div class="success">✅ All checks are completed successfully!</div>`;
+      } else {
+        resultMessage.innerHTML = `<div class="error"><strong>⚠️ Unchecked Items:</strong><br>${errors.join("<br>")}</div>`;
+      }
+    });
+  </script>
+</body>
+</html>
