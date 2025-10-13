@@ -73,7 +73,7 @@
     }
 
     button:hover {
-      background: #c0d833;
+      background: #d4ea43;
       transform: scale(1.05);
     }
 
@@ -84,6 +84,8 @@
       padding: 20px 120px;
       margin-top: 25px;
       text-align: left;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards;
     }
 
     .device-form h2 {
@@ -104,14 +106,16 @@
     }
 
     .result {
-      margin-top: 25px;
+      margin-top: 15px;
       font-weight: bold;
       font-size: 1.1rem;
       padding: 10px;
       border-radius: 8px;
-      width: 25%;
+      width: 40%;
+      max-width: 600px;
       text-align: center;
-      
+      transition: all 0.3s ease;
+      text-align: center;
     }
 
     .success {
@@ -123,13 +127,66 @@
     }
 
     .error {
-      background: rgba(255, 80, 80, 0.1);
-      color: #ff7a7a;
+      background: rgba(255, 80, 80, 0.08);
+      color: #ff9b9b;
       border: 1px solid #ff7a7a;
       text-align: left;
-      padding: 20px;
+      padding: 20px 30px;
+      border-radius: 10px;
+      animation: fadeIn 0.4s ease;
       text-align: center;
       border-radius: 8px;
+    }
+
+    .error strong {
+      display: block;
+      color: #ff7a7a;
+      font-size: 1.5rem;
+    }
+
+    /* Error List Styling */
+    .error-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .error-item {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .error-item:last-child {
+      border-bottom: none;
+    }
+
+    .error-item span {
+      font-size: 0.95rem;
+      color: #ffdcdc;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #a8b6d1;
+      margin-bottom: 20px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .device-form {
+        padding: 20px 20px;
+      }
+      .result {
+        width: 90%;
+      }
     }
   </style>
 </head>
@@ -149,33 +206,27 @@
       </select>
       <button id="createForms">Create Forms</button>
     </div>
-</div>
+  </div>
 
-<div class="footer">
-  version 1.0.6 
-  Done by the Interns
-</div>
+  <div id="formsContainer"></div>
 
-<script>
-  // Get the select element
-  const select = document.getElementById('numDevices');
+  <button id="validateBtn" style="margin-top:20px;">Validate Checks</button>
+  <div id="resultMessage" class="result"></div>
 
-  // Generate options from 1 to 10
-  for (let i = 1; i <= 10; i++) {
-    const option = document.createElement('option');
-    option.value = i;
-    option.textContent = i;
-    select.appendChild(option);
-  }
-</script>
-
-    <div id="formsContainer"></div>
-
-    <button id="validateBtn" style="margin-top:20px;">Validate Checks</button>
-    <div id="resultMessage" class="result"></div>
+  <div class="footer">
+    version 1.1.3 — Done by the Interns
   </div>
 
   <script>
+    // Generate select options
+    const select = document.getElementById('numDevices');
+    for (let i = 1; i <= 10; i++) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = i;
+      select.appendChild(option);
+    }
+
     const devices = [
       "Cisco 15454/DWDM",
       "Cyan Z77/Z33/Z22",
@@ -227,6 +278,8 @@
           checklistDiv.innerHTML = createChecklist(type);
         });
       });
+
+      formsContainer.scrollIntoView({ behavior: "smooth" });
     });
 
     function createChecklist(type) {
@@ -257,7 +310,7 @@
     validateBtn.addEventListener("click", () => {
       const deviceForms = document.querySelectorAll(".device-form");
       let allChecked = true;
-      let errors = [];
+      let errorItems = [];
 
       deviceForms.forEach((form, index) => {
         const checkboxes = form.querySelectorAll(".checkItem");
@@ -265,7 +318,13 @@
 
         if (unchecked.length > 0) {
           allChecked = false;
-          errors.push(`Device ${index + 1}: ${unchecked.length} unchecked <br>(${unchecked.map(cb => cb.parentElement.textContent.trim()).join(", ")})`);
+          errorItems.push(`
+            <li class="error-item">
+              <strong>Device ${index + 1}</strong>
+              <span>${unchecked.length} unchecked:</span>
+              <span>${unchecked.map(cb => cb.parentElement.textContent.trim()).join(", ")}</span>
+            </li>
+          `);
         }
       });
 
@@ -275,7 +334,14 @@
       } else if (allChecked) {
         resultMessage.innerHTML = `<div class="success">✅ All checks are completed successfully!</div>`;
       } else {
-        resultMessage.innerHTML = `<div class="error"><strong>⚠️ Unchecked Items:</strong><br>${errors.join("<br>")}</div>`;
+        resultMessage.innerHTML = `
+          <div class="error">
+            <strong>⚠️ Unchecked Items:</strong>
+            <ul class="error-list">
+              ${errorItems.join("")}
+            </ul>
+          </div>
+        `;
       }
     });
   </script>
