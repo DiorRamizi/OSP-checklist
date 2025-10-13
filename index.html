@@ -144,7 +144,7 @@
 </div>
 
 <div class="footer">
-  version 1.0.3 
+  version 1.0.4 
   Done by the Interns
 </div>
 
@@ -257,7 +257,7 @@
 
         if (unchecked.length > 0) {
           allChecked = false;
-          errors.push(`Device ${index + 1}: ${unchecked.length} unchecked (${unchecked.map(cb => cb.parentElement.textContent.trim()).join(", ")})`);
+          errors.push(`Device ${index + 1}: ${unchecked.length} unchecked <br>(${unchecked.map(cb => cb.parentElement.textContent.trim()).join(", ")})`);
         }
       });
 
