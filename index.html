@@ -121,12 +121,7 @@
       text-align: left;
       opacity: 0;
       animation: fadeIn 0.6s ease forwards;
-       box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
-    }
-
-    .device-container{
-      display: flex;
-      align-items: center;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
     }
 
     body.light-mode .device-form {
@@ -138,17 +133,30 @@
     .device-form h2 {
       font-size: 1.4rem;
       color: #4aa3ff;
-      margin-bottom: 8px;
+      margin: 20px 10px 22px 0 ;
     }
 
     body.light-mode .device-form h2 {
       color: #2a5a9a;
     }
 
+    .device-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
     .checklist label {
       display: block;
       margin: 6px 0;
       font-size: 1.05rem;
+    }
+
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      align-self:  center;
+      align-items: flex-start;
     }
 
     input[type="checkbox"] {
@@ -186,13 +194,11 @@
       background: rgba(255, 80, 80, 0.08);
       color: #ff9b9b;
       border: 1px solid #ff7a7a;
-      text-align: left;
-      padding: 20px 30px;
-      border-radius: 10px;
-      animation: fadeIn 0.4s ease;
       text-align: center;
+      padding: 20px 30px;
       border-radius: 8px;
       box-shadow: 0 0 20px rgba(255, 0, 0, 0.481);
+      animation: fadeIn 0.4s ease;
     }
 
     body.light-mode .error {
@@ -258,13 +264,14 @@
       right: 20px;
       background: #c0d833;
       color: #041b3b;
-      padding: 10px 20px;
+      padding: 10px 15px;
       border-radius: 20px;
       border: none;
-      font-weight: bold;
       cursor: pointer;
       transition: background 0.2s, transform 0.1s;
-      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     body.light-mode .theme-toggle {
@@ -281,9 +288,14 @@
       background: #3a7abc;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .theme-toggle .sun-icon {
+      width: 24px;
+      height: 24px;
     }
 
     @media (max-width: 600px) {
@@ -296,22 +308,36 @@
       .theme-toggle {
         top: 10px;
         right: 10px;
-        padding: 8px 15px;
-        font-size: 1rem;
+        padding: 8px 12px;
       }
+      .theme-toggle svg {
+        width: 16px;
+        height: 16px;
+      }
+      .theme-toggle .sun-icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <button class="theme-toggle" id="themeToggle">⏾</button>
+  <button class="theme-toggle" id="themeToggle">
+ <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 22C17.5228 22 22 17.5228 22 12C22 11.5373 21.3065 11.4608 21.0672 11.8568C19.9289 13.7406 17.8615 15 15.5 15C11.9101 15 9 12.0899 9 8.5C9 6.13845 10.2594 4.07105 12.1432 2.93276C12.5392 2.69347 12.4627 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="#000000"></path> </g></svg>
+  </button>
   <header>
     <div class="logo-space">
       <img id="logo" src="https://nettxio.com/wp-content/uploads/2022/07/nettxio-1.svg" alt="Logo">
     </div>
-    <h1>MOP CHECKLIST</h1>
+    <h1>OSP CHECKLIST</h1>
     <div class="version">
-    version 1.2.4 — Done by the Interns
-  </div>
+      version 1.2.6 — Done by the Interns
+    </div>
   </header>
 
   <div class="container">
@@ -335,12 +361,18 @@
     const logo = document.getElementById('logo');
     const darkModeLogo = 'https://nettxio.com/wp-content/uploads/2022/07/nettxio-1.svg';
     const lightModeLogo = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0Z0UlpyhQviNHp2LuYPCo-Egv46g6PoQZaQ&s';
+    const moonIcon = `
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 22C17.5228 22 22 17.5228 22 12C22 11.5373 21.3065 11.4608 21.0672 11.8568C19.9289 13.7406 17.8615 15 15.5 15C11.9101 15 9 12.0899 9 8.5C9 6.13845 10.2594 4.07105 12.1432 2.93276C12.5392 2.69347 12.4627 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="#000000"></path> </g></svg>
+    `;
+    const sunIcon = `
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M11 1C11 0.447715 11.4477 0 12 0C12.5523 0 13 0.447715 13 1V3C13 3.55228 12.5523 4 12 4C11.4477 4 11 3.55228 11 3V1Z" fill="#ffffff"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M18 12C18 15.3137 15.3137 18 12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12ZM8.06167 12C8.06167 14.1751 9.82492 15.9383 12 15.9383C14.1751 15.9383 15.9383 14.1751 15.9383 12C15.9383 9.82492 14.1751 8.06167 12 8.06167C9.82492 8.06167 8.06167 9.82492 8.06167 12Z" fill="#ffffff"></path> <path d="M20.4853 3.51472C20.0947 3.12419 19.4616 3.12419 19.0711 3.51472L17.6568 4.92893C17.2663 5.31946 17.2663 5.95262 17.6568 6.34315C18.0474 6.73367 18.6805 6.73367 19.0711 6.34315L20.4853 4.92893C20.8758 4.53841 20.8758 3.90524 20.4853 3.51472Z" fill="#ffffff"></path> <path d="M1 13C0.447715 13 0 12.5523 0 12C0 11.4477 0.447715 11 1 11H3C3.55228 11 4 11.4477 4 12C4 12.5523 3.55228 13 3 13H1Z" fill="#ffffff"></path> <path d="M3.51472 3.51472C3.1242 3.90524 3.1242 4.53841 3.51472 4.92893L4.92894 6.34315C5.31946 6.73367 5.95263 6.73367 6.34315 6.34315C6.73368 5.95262 6.73368 5.31946 6.34315 4.92893L4.92894 3.51472C4.53841 3.12419 3.90525 3.12419 3.51472 3.51472Z" fill="#ffffff"></path> <path d="M11 21C11 20.4477 11.4477 20 12 20C12.5523 20 13 20.4477 13 21V23C13 23.5523 12.5523 24 12 24C11.4477 24 11 23.5523 11 23V21Z" fill="#ffffff"></path> <path d="M6.34315 17.6569C5.95263 17.2663 5.31946 17.2663 4.92894 17.6569L3.51473 19.0711C3.1242 19.4616 3.1242 20.0948 3.51473 20.4853C3.90525 20.8758 4.53842 20.8758 4.92894 20.4853L6.34315 19.0711C6.73368 18.6805 6.73368 18.0474 6.34315 17.6569Z" fill="#ffffff"></path> <path d="M21 13C20.4477 13 20 12.5523 20 12C20 11.4477 20.4477 11 21 11H23C23.5523 11 24 11.4477 24 12C24 12.5523 23.5523 13 23 13H21Z" fill="#ffffff"></path> <path d="M17.6568 17.6569C17.2663 18.0474 17.2663 18.6805 17.6568 19.0711L19.0711 20.4853C19.4616 20.8758 20.0947 20.8758 20.4853 20.4853C20.8758 20.0948 20.8758 19.4616 20.4853 19.0711L19.0711 17.6569C18.6805 17.2663 18.0474 17.2663 17.6568 17.6569Z" fill="#ffffff"></path> </g></svg>
+    `;
 
     themeToggle.addEventListener('click', () => {
       document.body.classList.toggle('light-mode');
-      themeToggle.textContent = document.body.classList.contains('light-mode')
-        ? '☀︎'
-        : '⏾';
+      themeToggle.innerHTML = document.body.classList.contains('light-mode')
+        ? sunIcon
+        : moonIcon;
       logo.src = document.body.classList.contains('light-mode')
         ? lightModeLogo
         : darkModeLogo;
@@ -388,13 +420,13 @@
         const form = document.createElement("div");
         form.className = "device-form";
         form.innerHTML = `
-          <h2>Device ${i}</h2>
-          <label>Select device type:</label><br />
+          <div class="device-header">
+            <h2>Device ${i}</h2>
+            <select class="deviceType">
+              <option value="" disabled selected>Select a device</option>
+              ${devices.map(d => `<option value="${d}">${d}</option>`).join("")}
+            </select>
           </div>
-          <select class="deviceType">
-            <option value="" disabled selected>Select a device</option>
-            ${devices.map(d => `<option value="${d}">${d}</option>`).join("")}
-          </select>
           <div class="checklist"></div>
         `;
         formsContainer.appendChild(form);
@@ -402,7 +434,7 @@
 
       document.querySelectorAll(".deviceType").forEach(select => {
         select.addEventListener("change", (e) => {
-          const checklistDiv = e.target.parentElement.querySelector(".checklist");
+          const checklistDiv = e.target.parentElement.parentElement.querySelector(".checklist");
           const type = e.target.value;
           checklistDiv.innerHTML = createChecklist(type);
         });
@@ -425,7 +457,7 @@
 
       return `
         <div class="checklist">
-          <h3 style="color:#c0d833;">Checklist</h3>
+          <h3 style="color:#c0d833; font-size: 1.5rem; margin: 5px 0;">Checklist</h3>
           ${checks.map(
             (c, i) => `
             <label>
