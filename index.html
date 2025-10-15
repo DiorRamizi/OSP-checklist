@@ -412,7 +412,13 @@
       transition: all 0.3s ease;
       align-self: center;
     }
+      .noc-error-names {
+      color:#ffdcdc;
+     }
 
+     body.light-mode .noc-error-names {
+      color: #b71c1c;
+     }
     @media (max-width: 600px) {
       .device-form {
         padding: 20px 20px;
@@ -443,6 +449,7 @@
         padding: 15px;
       }
     }
+    
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
@@ -476,7 +483,7 @@
 
   <div id="formsContainer"></div>
 
-  <button id="validateBtn" style="margin-top:20px;">Validate Checks</button>
+  <button id="validateBtn" style="margin-top:20px; margin-bottom: 15px;">Validate Checks</button>
   <div id="resultMessage" class="result"></div>
 
   <!-- UPDATED NOC CLEARANCE ROW ONLY -->
@@ -685,7 +692,7 @@
           <div class="error">
             <strong>⚠️ Clearance Incomplete</strong>
             <span style="display:block; margin:10px 0;">Need ${uncheckedCount}/5 clearances:</span>
-            <span style="color:#ffdcdc; font-weight:bold; font-size: 1.1rem;">${uncheckedItems.join(", ")}</span>
+            <span class="noc-error-names" style="font-weight:bold; font-size: 1.1rem;">${uncheckedItems.join(", ")}</span>
           </div>
         `;
       } else {
